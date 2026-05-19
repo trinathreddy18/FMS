@@ -1,0 +1,157 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User profile with role-based access",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["admin", "sales", "ppc", "crm", "doer", "viewer"] },
+        "whatsapp": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "email", "role"]
+    },
+    "Task": {
+      "title": "Task Assignment",
+      "description": "A task assigned to a doer",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "plannedDate": { "type": "string", "format": "date-time" },
+        "actualDate": { "type": "string", "format": "date-time" },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+        "status": { "type": "string", "enum": ["pending", "completed", "cancelled"] },
+        "doerId": { "type": "string" },
+        "doerName": { "type": "string" },
+        "assignedBy": { "type": "string" },
+        "formLink": { "type": "string" },
+        "whatsappSent": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["code", "title", "plannedDate", "priority", "status", "doerId"]
+    },
+    "Employee": {
+      "title": "Employee",
+      "description": "Employee master record for task assignment",
+      "type": "object",
+      "properties": {
+        "employeeId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "whatsapp": { "type": "string" },
+        "department": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["employeeId", "name", "whatsapp"]
+    },
+    "InventoryItem": {
+      "title": "Inventory Item",
+      "description": "An item in the inventory management system",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "totalAvailable": { "type": "number" },
+        "gsm": { "type": "string" },
+        "productSize": { "type": "string" },
+        "sleeves": { "type": "number" },
+        "noOfSleeves": { "type": "number" },
+        "pcsInSingleCartoon": { "type": "number" },
+        "lowStockThreshold": { "type": "number" }
+      },
+      "required": ["name", "totalAvailable"]
+    },
+    "FMSEntry": {
+      "title": "FMS Entry",
+      "description": "An entry in a dynamic Flow Management System",
+      "type": "object",
+      "properties": {
+        "flowId": { "type": "string" },
+        "flowName": { "type": "string" },
+        "data": { "type": "object", "description": "Form field values" },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "number" },
+              "what": { "type": "string" },
+              "how": { "type": "string" },
+              "who": { "type": "string", "description": "Employee Name" },
+              "whoId": { "type": "string", "description": "Employee ID ref" },
+              "planned": { "type": "string", "format": "date-time" },
+              "actual": { "type": "string", "format": "date-time" },
+              "status": { "type": "string", "enum": ["pending", "done", "delayed"] },
+              "tatHours": { "type": "number" }
+            }
+          }
+        },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["flowId", "data", "createdAt"]
+    },
+    "FlowDefinition": {
+      "title": "Flow Definition",
+      "description": "Dynamic configuration for a process flow",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": { "type": "string" },
+              "type": { "type": "string", "enum": ["text", "number", "date", "select"] },
+              "required": { "type": "boolean" },
+              "options": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "number" },
+              "what": { "type": "string" },
+              "who": { "type": "string", "description": "Default Employee ID" },
+              "how": { "type": "string" },
+              "tatHours": { "type": "number" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "fields", "steps"]
+    },
+    "Settings": {
+      "title": "System Settings",
+      "description": "Configuration for WhatsApp and other integrations",
+      "type": "object",
+      "properties": {
+        "whatsappVendor": { "type": "string" },
+        "whatsappInstanceId": { "type": "string" },
+        "whatsappToken": { "type": "string" },
+        "whatsappWebhookUrl": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "users": { "schema": "User", "description": "User profiles" },
+    "tasks": { "schema": "Task", "description": "Tasks and checklists" },
+    "inventory": { "schema": "InventoryItem", "description": "Inventory records" },
+    "fms": { "schema": "FMSEntry", "description": "Flow management records" },
+    "flowDefinitions": { "schema": "FlowDefinition", "description": "Configurations for different flows" },
+    "employees": { "schema": "Employee", "description": "Employee master list" },
+    "settings": { "schema": "Settings", "description": "Global settings" }
+  }
+}

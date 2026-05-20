@@ -7,6 +7,7 @@
     "dev": "tsx server.ts",
     "build": "vite build",
     "preview": "vite preview",
+    "start": "vite preview --host 0.0.0.0 --port ${PORT:-4173}",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
   },
@@ -40,14 +41,6 @@
     "path-browserify": "^1.0.1",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.3"
-  },
-{
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "start": "vite preview --host 0.0.0.0 --port ${PORT:-4173}"
+    "typescript": "~5.8.2"
   }
-}
 }
